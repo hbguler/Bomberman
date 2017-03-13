@@ -1,0 +1,13 @@
+for (int i = 0; i < monsterList.Count; i++) {
+                if (monsterList.ElementAt(i).Top > playerPB.Top)
+                    monsterList.ElementAt(i).Top -= monsterHorizontalSpeed;
+                else if (monsterList.ElementAt(i).Top < playerPB.Top)
+                    monsterList.ElementAt(i).Top += monsterHorizontalSpeed;
+
+                else {
+                    if (monsterList.ElementAt(i).Left > playerPB.Left)
+                        monsterList.ElementAt(i).Left -= monsterVerticalSpeed;
+                    else if (monsterList.ElementAt(i).Left < playerPB.Left)
+                        monsterList.ElementAt(i).Left += monsterVerticalSpeed;
+                }
+            }

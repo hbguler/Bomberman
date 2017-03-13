@@ -1,0 +1,94 @@
+// --Collision checks--
+        private bool collisionCheck(int nextX, int nextY) {
+            // Next position location, also a rectangle that will not be draw
+            PictureBox nextLocation = new PictureBox();
+            nextLocation.Location = new System.Drawing.Point(playerPB.Left + nextX, playerPB.Top + nextY);
+            nextLocation.Size = new System.Drawing.Size(playerPB.Width, playerPB.Height);
+            if (collisionCheckValue == true)
+                return true;
+            if (patternCollisionCheck(nextLocation) == true
+                && wallCollisionCheck(nextLocation) == true
+                && brickCollisionCheck(nextLocation) == true
+                && bombCollisionCheck(nextLocation) == true
+                && playerToMonsterCollisionCheck(nextLocation) == true) {
+
+                collisionCheckValue = true;
+                collisionTextBox.Text = string.Empty;
+                return true;
+            } else {
+                upDirection = false; downDirection = false;
+                leftDirection = false; rightDirection = false;
+                movementDone = true;
+                return false;
+            }
+
+        }
+
+        private bool patternCollisionCheck(PictureBox nextLocation) {
+            foreach (PictureBox patternBlock in patternList) {
+                if (patternBlock.Bounds.IntersectsWith(nextLocation.Bounds)) {
+                    collisionTextBox.Text = "Pattern";
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool wallCollisionCheck(PictureBox nextLocation) {
+            // Player starts at 0;0 location. (Because player is on panel.)
+            // But walls are bound to form, minus operation required because of this
+            // 60 is total offset, if you change the walls' size, change offset too.
+
+            if (nextLocation.Left < 0) {
+                collisionTextBox.Text = "Left Wall";
+                wallCollison.Text = leftWall.Right.ToString() + "-0";
+                return false;
+            } else if (nextLocation.Left > rightWall.Left - 69) {
+                collisionTextBox.Text = "Right Wall";
+                wallCollison.Text = rightWall.Left.ToString() + "-0";
+                return false;
+            } else if (nextLocation.Top < 0) {
+                collisionTextBox.Text = "Top Wall";
+                wallCollison.Text = "0-" + topWall.Bottom.ToString();
+                return false;
+            } else if (nextLocation.Top > bottomWall.Top - 60) {
+                collisionTextBox.Text = "Bottom Wall";
+                wallCollison.Text = "0-" + bottomWall.Top.ToString();
+                return false;
+            } else
+                return true;
+        }
+
+        private bool brickCollisionCheck(PictureBox nextLocation) {
+
+            foreach (PictureBox brick in brickList) {
+                if (brick.Bounds.IntersectsWith(nextLocation.Bounds)) {
+                    collisionTextBox.Text = "Brick";
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool bombCollisionCheck(PictureBox nextLocation) {
+            foreach (PictureBox bomb in bombList) {
+                if (bomb.Bounds.IntersectsWith(nextLocation.Bounds)) {
+                    if (bomb.Top == playerPB.Top && bomb.Left == playerPB.Left)
+                        continue;
+                    collisionTextBox.Text = "Bomb!";
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool playerToMonsterCollisionCheck(PictureBox nextLocation) {
+            foreach (PictureBox monster in monsterList) {
+                if (monster.Bounds.IntersectsWith(nextLocation.Bounds)) {
+                    collisionTextBox.Text = "Monster!!";
+                    return false;
+                }
+            }
+            return true;
+        }
+        #endregion
